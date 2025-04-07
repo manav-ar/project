@@ -1,0 +1,134 @@
+---
+title: "AWSD Dashboard"
+author: "Manav Arora"
+jupyter: python3
+format: 
+  dashboard:
+    theme: united
+---
+
+```{python}
+# prepare data
+import pandas as pd
+import dash
+from dash import dcc, html, Input, Output
+import dash_bootstrap_components as dbc
+import plotly.express as px
+import pandas as pd
+df = pd.read_csv('security_incidents.csv')
+df['Total casualties'] = df['Total killed'] + df['Total wounded']
+```
+
+# Overview
+
+## Row
+
+```{python}
+#| component: valuebox
+#| title: Total Incidents
+dict(
+    icon = "exclamation-triangle",
+    color = "primary",
+    value = df['Incident ID'].nunique()
+)
+```
+
+
+```{python}
+#| component: valuebox
+#| title: Total Casualties
+dict(
+    icon = "x-square",
+    color = "warning",
+    value = df['Total casualties'].sum()
+)
+```
+
+
+```{python}
+#| component: valuebox
+#| title: Total Kidnapped
+dict(
+    icon = "question-square",
+    value = df['Total kidnapped'].sum()
+)
+```
+
+## Row
+
+
+```{python}
+import altair as alt
+from vega_datasets import data
+import pandas as pd
+import uuid
+
+
+
+
+
+
+# Load world map as a TopoJSON feature
+world = alt.topo_feature(data.world_110m.url, "countries")
+
+# Definition for interactive brush
+#brush = alt.selection_interval(encodings=["x"], empty=False)
+brush = alt.selection_interval(
+    encodings=["longitude"],
+    empty=False,
+    value={"longitude": [-6, 24]}
+)
+
+
+# World disk (background sphere)
+sphere = alt.Chart(alt.sphere()).mark_geoshape(
+    fill="transparent", stroke="lightgray", strokeWidth=1
+)
+
+# Countries as shapes
+world_map = alt.Chart(world).mark_geoshape(
+    fill="lightgray", stroke="white", strokeWidth=0.1
+).project(type='naturalEarth1' , center=[100,30] )
+
+
+# Highlighted Borders for Selected Countries
+highlighted_countries = alt.Chart(world).mark_geoshape(
+    fill=None, stroke="black", strokeWidth=15
+).transform_filter(brush).project(type='naturalEarth1', center=[100, 30])
+
+
+
+# Earthquakes as dots on map
+quakes = alt.Chart(df).mark_circle(opacity=0.35, tooltip=True).encode(
+    longitude="Longitude:Q",
+    latitude="Latitude:Q",
+    color=alt.condition(brush, alt.value("goldenrod"), alt.value("steelblue")),
+    size=alt.Size("Total casualties:Q").scale(type="pow", range=[1, 1000], exponent=4)
+).add_params(brush).project(type='naturalEarth1' , center=[100, 30])
+
+# Combine layers for the map
+left_map = alt.layer(sphere,highlighted_countries, world_map, quakes).properties(width=1200, height=600) 
+
+# Histogram of earthquake counts per country
+# bars = alt.Chart(df).mark_bar().encode(
+#     x=alt.X("Country:N"),
+#     y="count():Q",
+#     color=alt.value("steelblue")
+# )
+
+bars = alt.Chart(df).mark_bar().encode(
+    x=alt.X("Country:N"),
+    y="count():Q",
+    color=alt.value("goldenrod")
+).transform_filter(brush).properties(width=400, height=300 )
+
+# Filtered earthquakes based on selection
+bars_overlay = bars.encode(color=alt.value("goldenrod")).transform_filter(brush)
+
+# Combine layers for histogram
+right_bars = alt.layer(bars, bars_overlay)
+
+# Concatenate map and bars vertically
+final_chart = alt.hconcat(left_map, bars).resolve_scale(x='independent')#left_map | right_bars
+final_chart
+```
