@@ -12,7 +12,6 @@ async-lru==2.0.4
 attrs==23.2.0
 Babel==2.15.0
 backoff==2.2.1
-beautifulsoup4 @ file:///home/conda/feedstock_root/build_artifacts/beautifulsoup4_1705564648255/work
 bitarray==3.0.0
 bleach==6.1.0
 blinker==1.9.0
