@@ -33,14 +33,7 @@ click @ file:///work/perseverance-python-buildout/croot/click_1698845879718/work
 cloudpathlib==0.20.0
 colbert-ai==0.2.19
 comm==0.2.2
-conda @ file:///home/conda/feedstock_root/build_artifacts/conda_1738241127085/work
-conda-content-trust @ file:///croot/conda-content-trust_1714483159009/work
-conda-libmamba-solver @ file:///croot/conda-libmamba-solver_1721662679737/work/src
-conda-package-handling @ file:///croot/conda-package-handling_1718138267740/work
-conda_package_streaming @ file:///croot/conda-package-streaming_1718136078615/work
 confection==0.1.5
-contourpy @ file:///home/conda/feedstock_root/build_artifacts/contourpy_1712429918028/work
-cryptography @ file:///croot/cryptography_1714660666131/work
 cssselect==1.2.0
 cycler @ file:///home/conda/feedstock_root/build_artifacts/cycler_1696677705766/work
 cymem==2.0.8
