@@ -32,10 +32,6 @@ click==8.1.7
 cloudpathlib==0.20.0
 colbert-ai==0.2.19
 comm==0.2.2
-conda-content-trust==0.2.0
-conda-libmamba-solver==24.7.0
-conda-package-handling==2.3.0
-conda_package_streaming==0.10.0
 confection==0.1.5
 contourpy==1.2.1
 cryptography==42.0.5
