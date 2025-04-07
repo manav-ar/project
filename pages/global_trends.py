@@ -12,8 +12,8 @@ df['Total casualties'] = df['Total killed'] + df['Total wounded']
 
 layout = html.Div([
     dbc.Row([
-        dbc.Col(dcc.RangeSlider(id='year-slider', min=df['Year'].min(), max=df['Year'].max(), value=[df['Year'].min(), df['Year'].max()], marks={str(year): str(year) for year in df['Year'].unique()}), md=6),
-        dbc.Col(dcc.Dropdown(id='attack-type-dropdown', options=[{'label': attack, 'value': attack} for attack in df['Means of attack'].unique()], multi=True, placeholder="Select Attack Types"), md=6)
+        dbc.Col(dcc.RangeSlider(id='year-slider', min=df['Year'].min(), max=df['Year'].max(), value=[df['Year'].min()+5, df['Year'].max()], marks={str(year): str(year) for year in df['Year'].unique()}), md=6),
+        dbc.Col(dcc.Dropdown(id='attack-type-dropdown', options=[{'label': attack, 'value': attack} for attack in df['Means of attack'].unique()], value=['Body-borne IED', 'Roadside IED', 'Vehicle-born IED'], multi=True, placeholder="Select Attack Types"), md=6)
     ], className="mt-3"),
     dbc.Row([
         dbc.Col([dcc.Graph(id='global-trends-map')]),
@@ -37,7 +37,13 @@ def update_country_trends(clickData, year_range, selected_attacks):
         if selected_attacks:
             filtered_df = filtered_df[filtered_df['Means of attack'].isin(selected_attacks)]
         country_trend = filtered_df.groupby('Year')['Total casualties'].sum().reset_index()
-        fig = px.line(country_trend, x='Year', y='Total casualties', title=f"Casualties in {country} Over Time")
+        fig = px.line(country_trend, x='Year', y='Total casualties', title=f"Casualties in {country} by selected Means over Time")
         return fig
     else:
-        return {}
+        country = 'Afghanistan'
+        filtered_df = df[(df['Country'] == country) & (df['Year'] >= year_range[0]) & (df['Year'] <= year_range[1])]
+        if selected_attacks:
+            filtered_df = filtered_df[filtered_df['Means of attack'].isin(selected_attacks)]
+        country_trend = filtered_df.groupby('Year')['Total casualties'].sum().reset_index()
+        fig = px.line(country_trend, x='Year', y='Total casualties', title=f"Casualties in {country} by selected Means over Time")
+        return fig

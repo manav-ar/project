@@ -12,8 +12,8 @@ df = df.dropna(subset=['Motive'])
 
 layout = html.Div([
     dbc.Row([
-        dbc.Col(dcc.RangeSlider(id='year-slider', min=df['Year'].min(), max=df['Year'].max(), value=[df['Year'].min(), df['Year'].max()], marks={str(year): str(year) for year in df['Year'].unique()}), md=8),
-        dbc.Col(dcc.Dropdown(id='motive-dropdown', options=[{'label': motive, 'value': motive} for motive in df['Motive'].unique()], multi=True, placeholder="Select Motive"), md=4),
+        dbc.Col(dcc.RangeSlider(id='year-slider', min=df['Year'].min(), max=df['Year'].max(), value=[df['Year'].min()+5, df['Year'].max()], marks={str(year): str(year) for year in df['Year'].unique()}), md=8),
+        dbc.Col(dcc.Dropdown(id='motive-dropdown', options=[{'label': motive, 'value': motive} for motive in df['Motive'].unique()], value = ['Political', 'Economic','Disputed'],multi=True, placeholder="Select Motive"), md=4),
         ], className="mt-3"),
     
     

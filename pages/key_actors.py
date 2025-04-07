@@ -17,8 +17,8 @@ df = df[df['Actor name']!= 'Not applicable']
 layout = html.Div([
     
     dbc.Row([
-        dbc.Col(dcc.RangeSlider(id='year-slider', min=df['Year'].min(), max=df['Year'].max(), value=[df['Year'].min(), df['Year'].max()], marks={str(year): str(year) for year in df['Year'].unique()}), md=12),
-        dbc.Col(dcc.Dropdown(id='country-dropdown', options=[{'label': attack, 'value': attack} for attack in df['Country'].unique()], multi=True, placeholder="Select Country"), md=12)
+        dbc.Col(dcc.RangeSlider(id='year-slider', min=df['Year'].min(), max=df['Year'].max(), value=[df['Year'].min()+5, df['Year'].max()], marks={str(year): str(year) for year in df['Year'].unique()}), md=12),
+        dbc.Col(dcc.Dropdown(id='country-dropdown', options=[{'label': attack, 'value': attack} for attack in df['Country'].unique()], value=['Afghanistan', 'Yemen'], multi=True, placeholder="Select Country"), md=12)
         ], className="mt-3"),    
 
     dbc.Row([
